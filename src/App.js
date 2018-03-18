@@ -5,6 +5,10 @@ const DEFAULT_QUERY = "redux";
 const PATH_BASE = 'https://hn.algolia.com/api/v1';
 const PATH_SEARCH = '/search';
 const PARAM_SEARCH = '?query=';
+const DEFAULT_PAGE = 0;
+const PARAM_PAGE = 'page=';
+const DEFAULT_HPP = 25;
+const PARAM_HPP = 'hitsPerPage=';
 
 const isSearched = query => item => !query || item.title.toLowerCase().indexOf(query.toLowerCase()) !== -1;
 
@@ -22,13 +26,18 @@ class App extends Component {
   }
   //update state with results from api
   setSearchTopStories(result){
-    this.setState({result : result});
+    const {hits, page }  = result;
+    const oldHits  = page ===0 ? [] : this.state.result.hits;
+    const updateHits = [...oldHits, ...hits];
+
+    this.setState({result : {hits : updateHits, page}});
   }
   //fetch data
-  fetchSearchTopStories(query){
-    fetch(`${PATH_BASE}${PATH_SEARCH}${PARAM_SEARCH}${query}`)
+  fetchSearchTopStories(query, page){
+    let searchQuery = `${PATH_BASE}${PATH_SEARCH}${PARAM_SEARCH}${query}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`;    
+    fetch(searchQuery)
          .then( response => response.json())
-         .then( result => this.setSearchTopStories(result.hits))
+         .then( result => this.setSearchTopStories(result))
          .catch(err => new Error(err));
   }
 
@@ -45,10 +54,11 @@ class App extends Component {
 
   componentDidMount(){
     const {query} = this.state;
-    this.fetchSearchTopStories(query);
+    this.fetchSearchTopStories(query, DEFAULT_PAGE);
   }
   render() {   
     const { query, result } = this.state; 
+    const page = (result && result.page) || 0;
     return (
       <div className="App">
        <div className="page">
@@ -57,7 +67,12 @@ class App extends Component {
           Search
         </Search>
        </div>
-        { result && <Table list={result}/> }  
+        { result && <Table list={result.hits}/> }  
+        <div className="interactions">
+          <Button onClick={ () => this.fetchSearchTopStories(query, page +1) }>
+           More..
+          </Button>
+        </div>
       </div>
       </div>
     );
@@ -92,4 +107,7 @@ const Table = ({list}) =>  {
       );  
 }
 
+const Button = ({onClick, children}) => {
+ return (<button onClick={onClick}>{children}</button>);
+}
 export default App;
