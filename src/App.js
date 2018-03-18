@@ -17,7 +17,8 @@ class App extends Component {
     super(props);
     this.state = {
       result : null,
-      query : DEFAULT_QUERY
+      query : DEFAULT_QUERY,
+      isAjax : false
     };
     this.onSearchChange = this.onSearchChange.bind(this);
     this.setSearchTopStories = this.setSearchTopStories.bind(this);
@@ -34,11 +35,19 @@ class App extends Component {
   }
   //fetch data
   fetchSearchTopStories(query, page){
-    let searchQuery = `${PATH_BASE}${PATH_SEARCH}${PARAM_SEARCH}${query}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`;    
+    let searchQuery = `${PATH_BASE}${PATH_SEARCH}${PARAM_SEARCH}${query}&${PARAM_PAGE}${page}&${PARAM_HPP}${DEFAULT_HPP}`;
+    this.setState({isAjax : true});   
     fetch(searchQuery)
          .then( response => response.json())
-         .then( result => this.setSearchTopStories(result))
-         .catch(err => new Error(err));
+         .then( result => {
+          this.setSearchTopStories(result);
+          this.setState({isAjax : false});  
+
+         })
+         .catch(err => { 
+          alert('Somethig went wrong!!');
+          this.setState({isAjax : false});
+         });
   }
 
   onSearchChange(e){
@@ -48,7 +57,7 @@ class App extends Component {
 
   onSubmit(e){
     const {query} = this.state;
-    this.fetchSearchTopStories(query);
+    this.fetchSearchTopStories(query, DEFAULT_PAGE);
     e.preventDefault();
   }
 
@@ -57,20 +66,20 @@ class App extends Component {
     this.fetchSearchTopStories(query, DEFAULT_PAGE);
   }
   render() {   
-    const { query, result } = this.state; 
+    const { query, result, isAjax} = this.state; 
     const page = (result && result.page) || 0;
     return (
       <div className="App">
        <div className="page">
         <div className="interactions">
-        <Search value={query} onChange={this.onSearchChange} onSubmit={this.onSubmit} >
+        <Search isAjax={isAjax} value={query} onChange={this.onSearchChange} onSubmit={this.onSubmit} >
           Search
         </Search>
        </div>
         { result && <Table list={result.hits}/> }  
         <div className="interactions">
-          <Button onClick={ () => this.fetchSearchTopStories(query, page +1) }>
-           More..
+          <Button onClick={ () => this.fetchSearchTopStories(query, page +1) } isAjax={isAjax}>
+           {isAjax === true ? "Loading...." : "More..."}
           </Button>
         </div>
       </div>
@@ -80,11 +89,11 @@ class App extends Component {
 }
 
 //Search bomponent
-const Search = ({value, onChange, onSubmit,children }) => {    
+const Search = ({value, onChange, onSubmit, isAjax, children }) => {    
     return (
       <form onSubmit={onSubmit}>           
         <input value={value} type="text" onChange={onChange}/>
-        <button type="submit">{ children } </button>
+        <button type="submit" disabled={isAjax === true ? "disabled" : ""}>{ children } </button>
       </form> 
       ); 
 }
@@ -107,7 +116,7 @@ const Table = ({list}) =>  {
       );  
 }
 
-const Button = ({onClick, children}) => {
- return (<button onClick={onClick}>{children}</button>);
+const Button = ({onClick, isAjax, children}) => {
+ return (<button disabled={isAjax === true ? "disabled" : ""} onClick={onClick}>{children}</button>);
 }
 export default App;
