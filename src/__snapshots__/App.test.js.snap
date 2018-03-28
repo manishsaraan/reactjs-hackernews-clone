@@ -1,0 +1,168 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`App snapshots 1`] = `
+<div
+  className="App"
+>
+  <div
+    className="page"
+  >
+    <div
+      className="interactions"
+    >
+      <form
+        onSubmit={[Function]}
+      >
+        <input
+          onChange={[Function]}
+          type="text"
+          value="redux"
+        />
+        <button
+          disabled="disabled"
+          type="submit"
+        >
+          Search
+           
+        </button>
+      </form>
+    </div>
+    <div
+      className="table"
+    />
+    <div
+      className="interactions"
+    >
+      <button
+        disabled="disabled"
+        onClick={[Function]}
+      >
+        Loading....
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Button snapshots 1`] = `
+<button
+  disabled=""
+  onClick={undefined}
+>
+  Give me more...
+</button>
+`;
+
+exports[`Search snapshots 1`] = `
+<form
+  onSubmit={undefined}
+>
+  <input
+    onChange={undefined}
+    type="text"
+    value={undefined}
+  />
+  <button
+    disabled=""
+    type="submit"
+  >
+    Search
+     
+  </button>
+</form>
+`;
+
+exports[`Table snapshots 1`] = `
+<div
+  className="table"
+>
+  <div
+    className="table-row"
+  >
+    <span
+      style={
+        Object {
+          "width": "40%",
+        }
+      }
+    >
+      <a
+        href={undefined}
+      >
+        1
+      </a>
+    </span>
+    <span
+      style={
+        Object {
+          "width": "30%",
+        }
+      }
+    >
+      1
+    </span>
+    <span
+      style={
+        Object {
+          "width": "15%",
+        }
+      }
+    >
+      1
+    </span>
+    <span
+      style={
+        Object {
+          "width": "15%",
+        }
+      }
+    >
+      2
+    </span>
+  </div>
+  <div
+    className="table-row"
+  >
+    <span
+      style={
+        Object {
+          "width": "40%",
+        }
+      }
+    >
+      <a
+        href={undefined}
+      >
+        2
+      </a>
+    </span>
+    <span
+      style={
+        Object {
+          "width": "30%",
+        }
+      }
+    >
+      2
+    </span>
+    <span
+      style={
+        Object {
+          "width": "15%",
+        }
+      }
+    >
+      1
+    </span>
+    <span
+      style={
+        Object {
+          "width": "15%",
+        }
+      }
+    >
+      2
+    </span>
+  </div>
+</div>
+`;

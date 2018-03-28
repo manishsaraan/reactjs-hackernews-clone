@@ -137,3 +137,8 @@ const Button = ({onClick, isAjax, children}) => {
  return (<button disabled={isAjax === true ? "disabled" : ""} onClick={onClick}>{children}</button>);
 }
 export default App;
+export{
+  Button,
+  Search,
+  Table
+}
